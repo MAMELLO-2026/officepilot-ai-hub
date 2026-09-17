@@ -10,33 +10,80 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmailSummarizerRouteImport } from './routes/email-summarizer'
+import { Route as MeetingNotesRouteImport } from './routes/meeting-notes'
+import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as RewriterRouteImport } from './routes/rewriter'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmailSummarizerRoute = EmailSummarizerRouteImport.update({
+  id: '/email-summarizer',
+  path: '/email-summarizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeetingNotesRoute = MeetingNotesRouteImport.update({
+  id: '/meeting-notes',
+  path: '/meeting-notes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RewriterRoute = RewriterRouteImport.update({
+  id: '/rewriter',
+  path: '/rewriter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/email-summarizer': typeof EmailSummarizerRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/planner': typeof PlannerRoute
+  '/rewriter': typeof RewriterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/email-summarizer': typeof EmailSummarizerRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/planner': typeof PlannerRoute
+  '/rewriter': typeof RewriterRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/email-summarizer': typeof EmailSummarizerRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/planner': typeof PlannerRoute
+  '/rewriter': typeof RewriterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/email-summarizer' | '/meeting-notes' | '/planner' | '/rewriter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/email-summarizer' | '/meeting-notes' | '/planner' | '/rewriter'
+  id:
+    | '__root__'
+    | '/'
+    | '/email-summarizer'
+    | '/meeting-notes'
+    | '/planner'
+    | '/rewriter'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EmailSummarizerRoute: typeof EmailSummarizerRoute
+  MeetingNotesRoute: typeof MeetingNotesRoute
+  PlannerRoute: typeof PlannerRoute
+  RewriterRoute: typeof RewriterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +95,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/email-summarizer': {
+      id: '/email-summarizer'
+      path: '/email-summarizer'
+      fullPath: '/email-summarizer'
+      preLoaderRoute: typeof EmailSummarizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meeting-notes': {
+      id: '/meeting-notes'
+      path: '/meeting-notes'
+      fullPath: '/meeting-notes'
+      preLoaderRoute: typeof MeetingNotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rewriter': {
+      id: '/rewriter'
+      path: '/rewriter'
+      fullPath: '/rewriter'
+      preLoaderRoute: typeof RewriterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EmailSummarizerRoute: EmailSummarizerRoute,
+  MeetingNotesRoute: MeetingNotesRoute,
+  PlannerRoute: PlannerRoute,
+  RewriterRoute: RewriterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
