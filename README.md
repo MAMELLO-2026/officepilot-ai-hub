@@ -1,6 +1,6 @@
 # OfficePilot AI — AI Productivity Hub
 
-A modern, AI-powered workplace productivity hub for small business owners. One integrated dashboard — not multiple apps — with four everyday tools powered by smart, deterministic mock AI responses.
+A modern, AI-powered workplace productivity hub for small business owners. One integrated dashboard — not multiple apps — with four everyday tools that generate **real AI responses** from whatever you paste in.
 
 **Live app**: https://officepilot-ai-hub.lovable.app
 
@@ -18,13 +18,26 @@ A modern, AI-powered workplace productivity hub for small business owners. One i
 
 Every tool includes:
 
-- **Load example** buttons — see results instantly without typing
-- **Loading states** — realistic simulated AI processing
+- **Real AI generation** — results are written by an AI model based on your exact input, never canned examples
+- **"AI is thinking…" loading state** — shown while the model works
 - **Copy buttons** — one-click copy of any result
 - **Responsible AI notices** — a disclaimer under every AI input, in the footer on every page, and an info (ⓘ) icon on each tool explaining how AI is used responsibly
 
 > *Footer notice shown on every page: "Powered by AI — Always review AI output. Do not share confidential information."*
 > *Input disclaimer: "This content is AI generated and should be reviewed before sending. OfficePilot does not store sensitive data and aims to reduce bias."*
+
+---
+
+## 🧠 How the AI works
+
+All four tools call a real AI model through **Lovable's built-in AI integration** — no external AI accounts or API keys to manage:
+
+1. Your text is sent from the page to a secure server function (`src/lib/ai.functions.ts`)
+2. The server function calls the Lovable AI Gateway with a tool-specific prompt (for example, the Rewriter sends: *"Rewrite this text in [selected tone] tone. Tones are friendly, professional and assertive. Make each tone clearly different."*)
+3. Structured results (bullets, task tables, matrix quadrants) are validated against a schema before being displayed; the Rewriter returns a finished email as text
+4. The result renders in the same UI, with copy buttons and AI labels
+
+Nothing you paste is stored by the app — text is used only to generate the result for that request.
 
 ---
 
@@ -37,21 +50,13 @@ Every tool includes:
 
 ---
 
-## 🧠 How the AI works
-
-This app runs in **mock AI mode** — no external API calls, no data leaves your browser. Responses are generated locally with deterministic heuristics (keyword scoring, date parsing, tone templates), so the same input always produces the same output. It's perfect for demos, prototypes, and testing UX flows.
-
-To connect a real AI provider later, swap the functions in `src/lib/mock-ai.ts` for live API calls — every route already handles loading and error states.
-
----
-
 ## 🛠️ Tech stack
 
 - **React 19** + **TanStack Start v1** (full-stack React with file-based routing)
-- **TanStack Router** for navigation
+- **TanStack Router** for navigation and **TanStack Query** for data flow
+- **Lovable AI Gateway** via the Vercel AI SDK for AI generation
 - **Tailwind CSS v4** + **shadcn/ui** components
-- **Vite 7** build tool
-- **TypeScript** throughout
+- **Vite 7** build tool, **TypeScript** throughout
 
 ---
 
@@ -66,16 +71,19 @@ npm run dev
 
 Then open http://localhost:8080.
 
+AI features work out of the box when run inside Lovable. To run locally outside Lovable, set a `LOVABLE_API_KEY` environment variable with your project's AI gateway key.
+
 ---
 
 ## 📁 Project structure
 
 ```
 src/
-├── components/       # AppShell (sidebar + footer), ToolPanel, CopyButton, ResponsibleAI
+├── components/            # AppShell (sidebar + footer), ToolPanel, CopyButton, ResponsibleAI
 ├── lib/
-│   ├── mock-ai.ts    # Local mock AI engine (summarize, parse, rewrite, prioritize)
-│   └── utils.ts      # Shared helpers
+│   ├── ai.functions.ts    # Server functions: real AI calls for all four tools
+│   ├── ai-gateway.server.ts # Lovable AI Gateway client helper
+│   └── utils.ts           # Shared helpers
 ├── routes/
 │   ├── __root.tsx            # App shell + global meta
 │   ├── index.tsx             # Dashboard Home
@@ -83,7 +91,7 @@ src/
 │   ├── meeting-notes.tsx     # Meeting Notes Parser
 │   ├── rewriter.tsx          # Professional Rewriter
 │   └── planner.tsx           # Daily Priority Planner
-└── styles.css        # Theme tokens (blue palette, soft shadows)
+└── styles.css             # Theme tokens (blue palette, soft shadows)
 ```
 
 ---
@@ -93,8 +101,8 @@ src/
 OfficePilot is built with responsible AI principles:
 
 - AI output is **always labelled** and should be **reviewed before sending**
-- **No sensitive data is stored** — nothing you paste leaves your browser
-- The toolset is designed to **reduce bias** with transparent, rule-based logic
+- Your text is used **only to generate the result** — it is never stored or shared
+- Every tool carries a clear disclaimer, and an ⓘ icon explains how AI is used responsibly
 
 ---
 
