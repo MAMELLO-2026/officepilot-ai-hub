@@ -11,7 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { rewriteMessage, type Tone } from "@/lib/mock-ai";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { rewriteMessageAi, type Tone } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/rewriter")({
   head: () => ({
@@ -48,11 +50,18 @@ function RewriterPage() {
   const [loading, setLoading] = useState(false);
   const [output, setOutput] = useState<string | null>(null);
 
+  const rewrite = useServerFn(rewriteMessageAi);
+
   const run = async () => {
     setLoading(true);
     setOutput(null);
-    setOutput(await rewriteMessage(input, tone));
-    setLoading(false);
+    try {
+      setOutput(await rewrite({ data: { text: input, tone } }));
+    } catch {
+      toast.error("The AI could not rewrite that message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
