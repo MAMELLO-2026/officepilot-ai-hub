@@ -140,7 +140,7 @@ export const rewriteMessageAi = createServerFn({ method: "POST" })
     const tone = data.tone === "Formal" ? "professional" : data.tone.toLowerCase();
     const text = (await runAi({
       system:
-        "You are a business writing assistant. Return only the finished email text, ready to send, with a greeting and a sign-off. No commentary, no markdown fences.",
+        `You are a business writing assistant. Return exactly ONE finished email in the ${tone} tone only — never several versions, never other tones, no labels, no commentary, no markdown fences. Include a greeting and a sign-off, and make the ${tone} tone unmistakable in the word choice.`,
       prompt: `Rewrite this text in ${tone} tone. Tones are friendly, professional and assertive. Make each tone clearly different.\n\nTEXT:\n${data.text}`,
     })) as string;
     return text.trim();
