@@ -3,6 +3,7 @@ import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { AIDisclaimer, AIInfoTooltip } from "@/components/ResponsibleAI";
 
 export function InputCard({
   label,
@@ -27,8 +28,9 @@ export function InputCard({
 }) {
   return (
     <Card className="shadow-[var(--shadow-soft)]">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between gap-2">
         <CardTitle className="text-base">{label}</CardTitle>
+        <AIInfoTooltip />
       </CardHeader>
       <CardContent className="space-y-4">
         <Textarea
@@ -51,6 +53,7 @@ export function InputCard({
             Load example
           </Button>
         </div>
+        <AIDisclaimer />
       </CardContent>
     </Card>
   );

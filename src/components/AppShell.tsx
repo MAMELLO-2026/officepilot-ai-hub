@@ -74,9 +74,15 @@ export function AppShell({
         </main>
 
         <footer className="border-t border-border bg-card px-5 py-5 lg:px-10">
-          <p className="mx-auto max-w-5xl text-center text-xs text-muted-foreground">
-            Powered by AI — Always review AI output. Do not share confidential information.
-          </p>
+          <div className="mx-auto max-w-5xl space-y-2 text-center">
+            <p className="text-xs text-muted-foreground">
+              Powered by AI — Always review AI output. Do not share confidential information.
+            </p>
+            <p className="text-xs font-medium text-muted-foreground">
+              This content is AI generated and should be reviewed before sending. OfficePilot does
+              not store sensitive data and aims to reduce bias.
+            </p>
+          </div>
         </footer>
       </div>
     </div>
