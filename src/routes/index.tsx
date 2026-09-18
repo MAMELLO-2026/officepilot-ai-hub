@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CalendarCheck, ListChecks, Mail, PenLine, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { AIInfoTooltip } from "@/components/ResponsibleAI";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/")({
@@ -95,7 +96,10 @@ function Dashboard() {
                   <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-accent-foreground">
                     <tool.icon className="size-5" />
                   </span>
-                  <CardTitle className="text-base">{tool.title}</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    {tool.title}
+                    <AIInfoTooltip />
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">{tool.text}</p>
