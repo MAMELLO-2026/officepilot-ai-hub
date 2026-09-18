@@ -5,7 +5,9 @@ import { AppShell } from "@/components/AppShell";
 import { CopyButton } from "@/components/CopyButton";
 import { EmptyState, InputCard, LoadingLines, ResultCard } from "@/components/ToolPanel";
 import { Badge } from "@/components/ui/badge";
-import { summarizeEmail, type EmailSummary } from "@/lib/mock-ai";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { summarizeEmailAi, type EmailSummary } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/email-summarizer")({
   head: () => ({
@@ -50,11 +52,18 @@ function EmailSummarizerPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<EmailSummary | null>(null);
 
+  const summarize = useServerFn(summarizeEmailAi);
+
   const run = async () => {
     setLoading(true);
     setResult(null);
-    setResult(await summarizeEmail(input));
-    setLoading(false);
+    try {
+      setResult(await summarize({ data: { text: input } }));
+    } catch {
+      toast.error("The AI could not finish that summary. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const asText = result

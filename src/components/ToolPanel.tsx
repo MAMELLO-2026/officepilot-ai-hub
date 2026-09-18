@@ -47,7 +47,7 @@ export function InputCard({
             ) : (
               <Sparkles className="size-4" />
             )}
-            {loading ? "Working…" : runLabel}
+            {loading ? "AI is thinking..." : runLabel}
           </Button>
           <Button variant="ghost" onClick={onSample} disabled={loading}>
             Load example

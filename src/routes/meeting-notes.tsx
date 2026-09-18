@@ -12,7 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { parseMeetingNotes, type MeetingTask } from "@/lib/mock-ai";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { parseMeetingNotesAi, type MeetingTask } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/meeting-notes")({
   head: () => ({
@@ -46,11 +48,18 @@ function MeetingNotesPage() {
   const [loading, setLoading] = useState(false);
   const [tasks, setTasks] = useState<MeetingTask[] | null>(null);
 
+  const parse = useServerFn(parseMeetingNotesAi);
+
   const run = async () => {
     setLoading(true);
     setTasks(null);
-    setTasks(await parseMeetingNotes(input));
-    setLoading(false);
+    try {
+      setTasks(await parse({ data: { text: input } }));
+    } catch {
+      toast.error("The AI could not read those notes. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const asText = tasks

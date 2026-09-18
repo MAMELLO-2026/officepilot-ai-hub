@@ -4,7 +4,9 @@ import { AppShell } from "@/components/AppShell";
 import { CopyButton } from "@/components/CopyButton";
 import { EmptyState, InputCard, LoadingLines, ResultCard } from "@/components/ToolPanel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { planPriorities, type PlannedTask, type Quadrant } from "@/lib/mock-ai";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { planPrioritiesAi, type PlannedTask, type Quadrant } from "@/lib/ai.functions";
 
 export const Route = createFileRoute("/planner")({
   head: () => ({
@@ -76,11 +78,18 @@ function PlannerPage() {
   const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState<PlannedTask[] | null>(null);
 
+  const plannerFn = useServerFn(planPrioritiesAi);
+
   const run = async () => {
     setLoading(true);
     setPlan(null);
-    setPlan(await planPriorities(input));
-    setLoading(false);
+    try {
+      setPlan(await plannerFn({ data: { text: input } }));
+    } catch {
+      toast.error("The AI could not sort that list. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const asText = plan
